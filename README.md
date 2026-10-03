@@ -1,39 +1,39 @@
 
 
 
-## Production-Grade Multi-Agent AI System -> For hands-on experience in working with LLMs
+## Production-Grade Multi-Agent AI Software Learning System
 
      ```
-    ** What this project builds **
-    
-    A **Software Languages Learning platform**: a five-agent system that plans a study curriculum,
-    explains topics from your own notes or LLM parametric knowledge, quizzes you, and adapts based on results.
-    
-    ** Multi-AI Agent Software Languages Learning System **
-    
+     A stateful multi-agent learning platform that creates personalized study plans, explains programming concepts,               evaluates learner understanding, and adapts learning recommendations based on performance.    
     ```
 
 ## Problem Statement
 
     ```
-    Learning any software programming requires multiple types of assistance or stages like explaining topic and then evaluating based on the topic content.
+    Learning any software programming requires multiple types of assistance or stages like explaining topic and then             evaluating based on the topic content.
     
     One general-purpose AI agent may handle everything, but responsibilities become difficult to separate and maintain.
     Different learning tasks require different capabilities.
     
-    The project addresses this using specialized 4 different agents.
+    The project addresses this using specialized 5 different agents.
     ```
 
 ## Solution
 
     ```
-    This multi-agent system takes input (goal) from the user and then generates curriculum plan for the provided goal.
-    
-    Then based on the curriculum planned, using MCP tool calls it reads the available notes and bring back the content if         provided notes has the content related to provided     goal, otherwise it brings content from its parametric knowledge.
-    
-    Once explainer agent provides the content, then quiz generator agent generates the quiz questions to evaluate the user       understanding and then grades the user answers        and then progress coach agent takes this explanation, quiz scores      and then provides topics which needs to reviewed again by the user.
-    
-    This loops runs until it completes all the topics provided in curriculum plan.
+    ## 💡 Solution
+
+     The system takes a learning goal from the user and generates a structured curriculum.
+     
+     For each topic in the curriculum:
+     
+          1. The Topic Explainer Agent retrieves relevant learning material using MCP tools.
+          2. If relevant notes are unavailable, the agent can fall back to the LLM's parametric knowledge.
+          3. The Quiz Generator Agent creates questions based on the topic.
+          4. The user's answers are evaluated using an LLM-based grading workflow.
+          5. The Progress Coach Agent analyzes the results and identifies topics that require additional review.
+          6. The workflow continues until all topics in the curriculum have been completed.
+
 
                          ┌───────────────────┐
                          │       User        │
@@ -166,19 +166,33 @@
      | `Topic_Explainer_Agent` | Explains the topic to the user and performs multiple MCP tool calls and LLM calls with  `          temperature > 0`. |
      | `Quiz_Generator_Agent`  | Generates quiz questions based on the topic and its content with `temperature > 0`, and                evaluates user-provided answers with `temperature = 0`. |
      | `Progress_Coach_Agent`  | Analyzes quiz scores for each topic and generates feedback identifying weak areas or                providing motivational guidance. |
+
+     ## 🌡️ LLM Configuration Strategy
+
+          | Agent / Task | Temperature | Reason |
+          |---|---:|---|
+          | Study Planning | `0` | Consistent curriculum generation |
+          | Topic Explanation | `> 0` | More natural and varied explanations |
+          | Quiz Generation | `> 0` | Generate diverse questions |
+          | Quiz Grading | `0` | More consistent evaluation |
+          | Progress Coaching | `> 0` | Generate personalized feedback |
     
       ```
 
 ## Technology Stack
 
     ```
-    | Technology | Purpose |
-    |---|---|
-    | Python | Application development |
-    | LangGraph | Agent orchestration |
-    | MCP | Tool/context integration |
-    | LLM | Reasoning and response generation |
-    | Git/GitHub | Version control |
+     | Technology | Purpose |
+     |---|---|
+     | Python | Core application development |
+     | LangGraph | Stateful multi-agent orchestration |
+     | MCP | Standardized tool integration |
+     | OpenAI | LLM inference |
+     | LangSmith | LLM and agent observability |
+     | DeepEval | LLM evaluation |
+     | SQLite | Workflow checkpoint persistence |
+     | Streamlit | Interactive user interface |
+     | Git / GitHub | Version control |
     
     ```
 
@@ -205,7 +219,7 @@
     │   └── sample_notes/           # Markdown files the agents read
     ├── data/                       # SQLite checkpoint DB (created at runtime)
     ├── main.py                     # Entry point
-    ├── Streamlit_UI_Screen.py      # For building UI screen for the project
+    ├── Streamlit_UI_Screen.py      # For building Streamlit screen for the project
     ├── docker-compose.yml          # Langfuse self-hosted stack
     ├── Makefile                    # One-command startup
     ├── requirements.txt
@@ -234,7 +248,9 @@
 ## Testing
 
     ```
-    # Quality evaluation tests, run before releases (~90 seconds, requires apenai api keys)
+     The project includes LLM-based evaluation using DeepEval.
+    
+    # Quality evaluation tests, run before releases (requires openai api keys)
     # 2 LLM-as-judge tests
     pytest tests/test_eval.py -v -s -m eval
 

@@ -6,7 +6,7 @@
      ```
     ** What this project builds **
     
-    A **Software Languages Learning platform**: a four-agent system that plans a study curriculum,
+    A **Software Languages Learning platform**: a five-agent system that plans a study curriculum,
     explains topics from your own notes or LLM parametric knowledge, quizzes you, and adapts based on results.
     
     ** Multi-AI Agent Software Languages Learning System **
@@ -29,20 +29,74 @@
     ```
     This multi-agent system takes input (goal) from the user and then generates curriculum plan for the provided goal.
     
-    Then based on the curriculum planned, using MCP tool calls it reads the available notes and bring back the content if provided notes has the content related to provided     goal, otherwise it brings content from its parametric knowledge.
+    Then based on the curriculum planned, using MCP tool calls it reads the available notes and bring back the content if         provided notes has the content related to provided     goal, otherwise it brings content from its parametric knowledge.
     
-    Once explainer agent provides the content, then quiz generator agent generates the quiz questions to evaluate the user understanding and then grades the user answers        and then progress coach agent takes this explanation, quiz scores and then provides topics which needs to reviewed again by the user.
+    Once explainer agent provides the content, then quiz generator agent generates the quiz questions to evaluate the user       understanding and then grades the user answers        and then progress coach agent takes this explanation, quiz scores      and then provides topics which needs to reviewed again by the user.
     
     This loops runs until it completes all the topics provided in curriculum plan.
+
+                         ┌───────────────────┐
+                         │       User        │
+                         │  Learning Goal    │
+                         └─────────┬─────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────┐
+                    │   Study Planner Agent    │
+                    │  Generates Curriculum    │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │ Human Approval Agent      │
+                    │       HITL Gate           │
+                    └────────────┬─────────────┘
+                                 │
+                              Approved
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │  Topic Explainer Agent   │
+                    │                          │
+                    │  ┌────────────────────┐  │
+                    │  │ MCP Tool Calls     │  │
+                    │  │ + LLM Calls        │  │
+                    │  └────────────────────┘  │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │   Quiz Generator Agent  │
+                    │ Generate + Grade Quiz    │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │    Progress Coach Agent  │
+                    │ Weak Areas + Feedback    │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                         Next Topic / Loop
+    
     ```
 
 ## Why multi agents?
 
     ```
-    This solution was designed in multi agent system because of different types of LLM calls and only 1 agent required MCP Tool calls.
-    Like Planner agent may need simple straight forward prompt with temperature as 0 because we don't want every time LLM to generate different types of curriculum for same     topic where as explainer topic needs Tool calling using MCP and LLM calls in loop until it finds the explanation and quiz generator may need temperature as > 0 while        generating question while in the same agent for grading it needs temperature as 0 because every time we want LLM to grade the answer in consistent way .
+      A single LLM could potentially perform all of these tasks, but the system intentionally separates responsibilities           into specialized agents.
+
+     Each agent has different requirements:
+
+     - **Study Planner Agent** uses deterministic generation (`temperature = 0`) because the same learning goal should                produce a consistent curriculum structure.
+     - **Human Approval Agent** introduces a Human-in-the-Loop checkpoint before the learning workflow proceeds.
+     - **Topic Explainer Agent** performs MCP tool calls to retrieve relevant learning material and uses LLM reasoning to             explain the topic.
+     - **Quiz Generator Agent** uses higher temperature for generating varied questions, while deterministic generation             (`temperature = 0`) is used during grading for more consistent evaluation.
+     - **Progress Coach Agent** analyzes learning performance and identifies topics that require additional review.
+
+     This separation provides clearer responsibilities, easier debugging, independent agent evaluation, and an architecture       that can be extended with additional specialized agents..
     
-    ```
+     ```
 
 ## Key Features
 

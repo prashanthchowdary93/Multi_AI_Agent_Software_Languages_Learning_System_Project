@@ -105,9 +105,15 @@
 
 
 ## Agents and Responsibilities
-
-    https://github.com/user-attachments/files/33004348/test.xlsx
-
+      ```
+     | Agent | Responsibility |
+     | `Study_Planner_Agent`   | Generates the curriculum plan for the provided learning goal with `temperature = 0`. |
+     | `Human_Approval_Agent`  | Presents the generated curriculum plan to the human and requests approval before proceeding|
+     | `Topic_Explainer_Agent` | Explains the topic to the user and performs multiple MCP tool calls and LLM calls with  `          temperature > 0`. |
+     | `Quiz_Generator_Agent`  | Generates quiz questions based on the topic and its content with `temperature > 0`, and                evaluates user-provided answers with `temperature = 0`. |
+     | `Progress_Coach_Agent`  | Analyzes quiz scores for each topic and generates feedback identifying weak areas or                providing motivational guidance. |
+    
+      ```
 
 ## Technology Stack
 

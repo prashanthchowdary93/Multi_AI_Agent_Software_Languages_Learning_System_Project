@@ -241,12 +241,43 @@
 ## Running the Application
 
     ```
-    We can run the application using main.py for terminal interface, using below command
-      python main.py "Basics of Langgraph fundamentals"
-    
-    We can also run the application using Streamlit_UI_Screen.py for UI screen interface,using below command:
-      streamlit run Streamlit_UI_Screen.py
+    The application can be started through either the CLI or Streamlit interface.
+    ### Streamlit Interface
+
+          Launch the interactive UI:
+          
+          ```bash
+          streamlit run Streamlit_UI_Screen.py
+    ### Terminal iNterface 
+          python main.py "Basics of Langgraph fundamentals"
     ```
+
+## Production Engineering
+      ```
+     ## ⚙️ Production Engineering Features
+
+          ### Stateful Workflow
+          
+               LangGraph manages the state of the learning workflow across multiple agent executions.
+          
+          ### Checkpointing & Session Resume
+          
+               Agent state is persisted to SQLite after agent execution, allowing interrupted sessions to be resumed.
+          
+          ### Human-in-the-Loop
+               The generated curriculum is presented to the user for approval before the learning workflow proceeds.
+               
+               If the user rejects the curriculum, the planner generates a revised plan.
+          
+          ### Observability
+               LangSmith is used to trace agent executions and LLM calls, making it easier to understand workflow behavior                  and debug failures.
+          
+          ### Evaluation
+               DeepEval is used to evaluate LLM-generated responses using LLM-as-judge evaluation tests.
+          
+          ### MCP Tool Integration
+               The Topic Explainer Agent can retrieve relevant learning content through MCP tools before generating                          explanations.          
+      ```
 
 ## Author
 **Prashanth Chowdary Rimmalapudi**
